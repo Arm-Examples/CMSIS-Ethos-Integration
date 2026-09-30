@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  Build_Example:
     runs-on: ubuntu-latest
 
     steps:
@@ -53,14 +53,15 @@ jobs:
             cmsis-packs-
           path: /home/runner/.cache/arm/packs
 
-      - name: Build Ethos-U55 with AC6
-        run: cbuild Test-Ethos-U55.csolution.yml --packs --toolchain AC6
+      - parallel:
+        - name: Build Ethos-U55 with AC6
+          run: cbuild Test-Ethos-U55.csolution.yml --packs --toolchain AC6 --output build-u55-ac6
 
-      - name: Build Ethos-U85 with AC6
-        run: cbuild Test-Ethos-U85.csolution.yml --packs --toolchain AC6
+        - name: Build Ethos-U85 with AC6
+          run: cbuild Test-Ethos-U85.csolution.yml --packs --toolchain AC6 --output build-u85-ac6
 
-      - name: Build Ethos-U55 with GCC
-        run: cbuild Test-Ethos-U55.csolution.yml --packs --toolchain GCC
+        - name: Build Ethos-U55 with GCC
+          run: cbuild Test-Ethos-U55.csolution.yml --packs --toolchain GCC --output build-u55-gcc
 
-      - name: Build Ethos-U85 with GCC
-        run: cbuild Test-Ethos-U85.csolution.yml --packs --toolchain GCC
+        - name: Build Ethos-U85 with GCC
+          run: cbuild Test-Ethos-U85.csolution.yml --packs --toolchain GCC --output build-u85-gcc
