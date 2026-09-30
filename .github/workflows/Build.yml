@@ -41,10 +41,6 @@ jobs:
           cpackget init https://www.keil.com/pack/index.pidx
           cpackget update-index
 
-      - name: Register local pack
-        run: |
-          cpackget add ./CMSIS-Ethos-U/ARM.CMSIS-Ethos-U.pdsc
-
       - name: Cache CMSIS packs
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
@@ -53,15 +49,31 @@ jobs:
             cmsis-packs-
           path: /home/runner/.cache/arm/packs
 
+      - name: Register local pack
+        run: cpackget add ./CMSIS-Ethos-U/ARM.CMSIS-Ethos-U.pdsc
+
+      - name: Install required CMSIS packs
+        shell: bash
+        run: |
+          packs="$RUNNER_TEMP/missing-packs.txt"
+          {
+            csolution list packs Test-Ethos-U55.csolution.yml -m
+            csolution list packs Test-Ethos-U85.csolution.yml -m
+          } | sort -u > "$packs"
+
+          if [[ -s "$packs" ]]; then
+            cpackget add -f "$packs" --agree-embedded-license
+          fi
+
       - parallel:
         - name: Build Ethos-U55 with AC6
-          run: cbuild Test-Ethos-U55.csolution.yml --packs --toolchain AC6 --output build-u55-ac6
+          run: cbuild Test-Ethos-U55.csolution.yml --toolchain AC6 --output build-u55-ac6
 
         - name: Build Ethos-U85 with AC6
-          run: cbuild Test-Ethos-U85.csolution.yml --packs --toolchain AC6 --output build-u85-ac6
+          run: cbuild Test-Ethos-U85.csolution.yml --toolchain AC6 --output build-u85-ac6
 
         - name: Build Ethos-U55 with GCC
-          run: cbuild Test-Ethos-U55.csolution.yml --packs --toolchain GCC --output build-u55-gcc
+          run: cbuild Test-Ethos-U55.csolution.yml --toolchain GCC --output build-u55-gcc
 
         - name: Build Ethos-U85 with GCC
-          run: cbuild Test-Ethos-U85.csolution.yml --packs --toolchain GCC --output build-u85-gcc
+          run: cbuild Test-Ethos-U85.csolution.yml --toolchain GCC --output build-u85-gcc
