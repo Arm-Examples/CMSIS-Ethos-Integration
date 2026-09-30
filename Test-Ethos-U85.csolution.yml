@@ -11,26 +11,11 @@ solution:
 
   # List the packs that define the device and/or board.
   packs:
-    - pack: ARM::SSE_320_BSP@^2.0.0
     - pack: AlifSemiconductor::Ensemble@2.2.1
+    - pack: ARM::SSE_320_BSP@^2.0.0
 
   # List different hardware targets that are used to deploy the solution.
   target-types:
-    - type: SSE-320-U85
-      board: ARM::SSE-320
-      device: ARM::SSE-320-FVP
-      variables:
-        - Board-Layer: ./Board/Corstone-320/Board-U85.clayer.yml
-      target-set:
-        - set:
-          debugger:
-            name: Arm-FVP
-            model: FVP_Corstone_SSE-320
-            config-file: ./Board/Corstone-320/fvp_config_u85.txt
-            args: ""
-          images:
-            - project-context: Test-Ethos-U.Debug
-
     - type: AppKit-E8-U85
       device: AE822FA0E5597BS0
       board: AppKit-E8-AIML
@@ -45,6 +30,21 @@ solution:
             - project-context: Test-Ethos-U.Debug
       variables:
         - Board-Layer: $SolutionDir()$/Board/AppKit-E8_M55_HP/Board_HP-U85.clayer.yml
+
+    - type: SSE-320-U85
+      board: ARM::SSE-320
+      device: ARM::SSE-320-FVP
+      variables:
+        - Board-Layer: ./Board/Corstone-320/Board-U85.clayer.yml
+      target-set:
+        - set:
+          debugger:
+            name: Arm-FVP
+            model: FVP_Corstone_SSE-320
+            config-file: ./Board/Corstone-320/fvp_config_u85.txt
+            args: ""
+          images:
+            - project-context: Test-Ethos-U.Debug
 
   # List of different build configurations.
   build-types:

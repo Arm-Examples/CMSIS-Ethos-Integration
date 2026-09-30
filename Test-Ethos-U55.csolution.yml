@@ -11,26 +11,11 @@ solution:
 
   # List the packs that define the device and/or board.
   packs:
-    - pack: ARM::V2M_MPS3_SSE_300_BSP@1.5.0
     - pack: AlifSemiconductor::Ensemble@2.2.1
+    - pack: ARM::V2M_MPS3_SSE_300_BSP@1.5.0
 
   # List different hardware targets that are used to deploy the solution.
   target-types:
-    - type: SSE-300-U55
-      board: ARM::V2M-MPS3-SSE-300-FVP
-      device: ARM::SSE-300-MPS3
-      variables:
-        - Board-Layer: ./Board/Corstone-300/Board-U55.clayer.yml
-      target-set:
-        - set:
-          debugger:
-            name: Arm-FVP
-            model: FVP_Corstone_SSE-300_Ethos-U55
-            config-file: ./Board/Corstone-300/fvp_config_u55.txt
-            args: ""
-          images:
-            - project-context: Test-Ethos-U.Debug
-
     - type: AppKit-E8-U55
       device: AE822FA0E5597BS0
       board: AppKit-E8-AIML
@@ -45,6 +30,21 @@ solution:
             - project-context: Test-Ethos-U.Debug
       variables:
         - Board-Layer: $SolutionDir()$/Board/AppKit-E8_M55_HP/Board_HP.clayer.yml
+
+    - type: SSE-300-U55
+      board: ARM::V2M-MPS3-SSE-300-FVP
+      device: ARM::SSE-300-MPS3
+      variables:
+        - Board-Layer: ./Board/Corstone-300/Board-U55.clayer.yml
+      target-set:
+        - set:
+          debugger:
+            name: Arm-FVP
+            model: FVP_Corstone_SSE-300_Ethos-U55
+            config-file: ./Board/Corstone-300/fvp_config_u55.txt
+            args: ""
+          images:
+            - project-context: Test-Ethos-U.Debug
 
   # List of different build configurations.
   build-types:
