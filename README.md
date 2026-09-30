@@ -1,4 +1,5 @@
 [![License](https://img.shields.io/github/license/Arm-Examples/CMSIS-Ethos-Integration?label=License)](./LICENSE)
+[![Build](https://img.shields.io/github/actions/workflow/status/Arm-Examples/CMSIS-Ethos-Integration/Build.yml?logo=arm&logoColor=0091bd&label=Build%20example)](https://github.com/Arm-Examples/CMSIS-Ethos-Integration/tree/main/.github/workflows/Build.yml)
 
 # CMSIS Ethos-U integration example
 
