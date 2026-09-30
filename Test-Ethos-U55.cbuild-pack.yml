@@ -2,6 +2,7 @@ cbuild-pack:
   resolved-packs:
     - resolved-pack: ARM::CMSIS@6.3.0
       selected-by-pack:
+        - ARM::CMSIS
         - ARM::CMSIS@^6.3.0
     - resolved-pack: ARM::CMSIS-Compiler@2.3.0
       selected-by-pack:
