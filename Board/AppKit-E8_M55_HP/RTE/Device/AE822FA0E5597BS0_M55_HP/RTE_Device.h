@@ -40,7 +40,7 @@
 //     <1=> enable
 // <i> Defines CPI AXI port
 // <i> Default: AXI port enable
-#define RTE_CPI_AXI_PORT                                      1
+#define RTE_CPI_AXI_PORT                                      0
 
 // <o> Select CPI ISP port
 //     <0=> disable
@@ -103,13 +103,13 @@
 // <o> CPI number of active framebuffers
 // <i> Defines CPI number of active framebuffers
 // <i> Default: 2
-#define RTE_CPI_NUM_ACTIVE_FRAMEBUFFERS                       0
+#define RTE_CPI_NUM_ACTIVE_FRAMEBUFFERS                       2
 
 // <o> Enable CPI streaming
 // <0=> Disable
 // <1=> Enable
 // <i> Default: 1
-#define RTE_CPI_STREAMING_ENABLE                              0
+#define RTE_CPI_STREAMING_ENABLE                              1
 
 // <e> MT9M114 [Driver_MT9M114]
 // <o> Enable/Disable MT9M114 camera sensor
@@ -374,90 +374,6 @@
 // <i> Default: 0
 #define RTE_ISP_IRQ_PRIORITY                    0
 
-// <o> ISP Enable AE Module
-//     <0=> disable
-//     <1=> enable
-// <i> defines if AE Module is enabled or not
-// <i> default: false
-#define RTE_ISP_AE_MODULE 1
-
-// <o> ISP Enable BLS Module
-//     <0=> disable
-//     <1=> enable
-// <i> defines if Black Level Subtraction Module is enabled or not
-// <i> default: false
-#define RTE_ISP_BLS_MODULE 1
-
-// <o> ISP Enable DMSC Module
-//     <0=> disable
-//     <1=> enable
-// <i> defines if Demosaic Module is enabled or not
-// <i> default: false
-#define RTE_ISP_DMSC_MODULE 1
-
-// <o> ISP Enable FLT Module
-//     <0=> disable
-//     <1=> enable
-// <i> defines if Noise/Sharpening-Filter Module is enabled or not
-// <i> default: false
-#define RTE_ISP_FLT_MODULE 1
-
-// <o> ISP Enable CCM Module
-//     <0=> disable
-//     <1=> enable
-// <i> defines if Color Correction Matrix Module is enabled or not
-// <i> default: false
-#define RTE_ISP_CCM_MODULE 1
-
-// <o> ISP Enable CSM Module
-//     <0=> disable
-//     <1=> enable
-// <i> defines if Color Space Conversion Module is enabled or not
-// <i> default: false
-#define RTE_ISP_CSM_MODULE 1
-
-// <o> ISP Enable WB Module
-//     <0=> disable
-//     <1=> enable
-// <i> defines if White Balancing Module is enabled or not
-// <i> default: false
-#define RTE_ISP_WB_MODULE 1
-
-// <o> ISP Enable EXPM Module
-//     <0=> disable
-//     <1=> enable
-// <i> defines if Auto-Exposure Statistics Module is enabled or not
-// <i> default: false
-#define RTE_ISP_EXPM_MODULE 1
-
-// <o> ISP Enable Gamma-out Module
-//     <0=> disable
-//     <1=> enable
-// <i> defines if Gamma-out Module is enabled or not
-// <i> default: false
-#define RTE_ISP_GAMMAOUT_MODULE 1
-
-// <o> ISP Enable WBM Module
-//     <0=> disable
-//     <1=> enable
-// <i> defines if White-Balancing Statistics Module is enabled or not
-// <i> default: false
-#define RTE_ISP_WBM_MODULE 1
-
-// <o> ISP Enable Binning Module
-//     <0=> disable
-//     <1=> enable
-// <i> defines if Binning Module is enabled or not
-// <i> default: false
-#define RTE_ISP_BINNING_MODULE 1
-
-// <o> ISP Enable Scaling Module
-//     <0=> disable
-//     <1=> enable
-// <i> defines if scaling Module is enabled or not
-// <i> default: true
-#define RTE_ISP_SCALAR_MODULE 1
-
 // <o> ISP Binning Enable
 //     <0=> disable
 //     <1=> enable
@@ -515,36 +431,48 @@
 // <i> Height in pixels of the ISP scaler output (after scaling from sensor dimensions).
 #define RTE_ISP_OUTPUT_HEIGHT       480
 
-// <o> ISP Sensor Input Width
-// <i> Width in pixels of the sensor input to the ISP pipeline.
-// <i> Default: MT9M114 sensor resolution (1280). Change for different sensors.
-#define RTE_ISP_SENSOR_INPUT_WIDTH  RTE_MT9M114_CAMERA_SENSOR_FRAME_WIDTH
-
-// <o> ISP Sensor Input Height
-// <i> Height in pixels of the sensor input to the ISP pipeline.
-// <i> Default: MT9M114 sensor resolution (720). Change for different sensors.
-#define RTE_ISP_SENSOR_INPUT_HEIGHT RTE_MT9M114_CAMERA_SENSOR_FRAME_HEIGHT
-
-// <o> ISP Crop Top offset <0-4095>
-// <i> Top offset in pixels for the cropped output window
-#define RTE_ISP_CROP_TOP    0
-
-// <o> ISP Crop Left offset <0-4095>
-// <i> Left offset in pixels for the cropped output window
-#define RTE_ISP_CROP_LEFT   0
-
-// <o> ISP Crop Width <1-4095>
-// <i> Width in pixels of the cropped output window.
-// <i> Default: full sensor input (no crop). Override with smaller value to crop.
-#define RTE_ISP_CROP_WIDTH  RTE_ISP_SENSOR_INPUT_WIDTH
-
-// <o> ISP Crop Height <1-4095>
-// <i> Height in pixels of the cropped output window.
-// <i> Default: full sensor input (no crop). Override with smaller value to crop.
-#define RTE_ISP_CROP_HEIGHT RTE_ISP_SENSOR_INPUT_HEIGHT
-
 #endif
 // </e> ISP (ISP) [Driver_ISP]
+
+// <e> JPEG (JPEG) [Driver_JPEG]
+// <i> Configuration settings for Driver_JPEG in component ::Drivers:JPEG
+#define RTE_JPEG 1
+#if RTE_JPEG
+
+// <o> JPEG IRQ priority <0-255>
+// <i> Defines Interrupt priority for JPEG.
+// <i> Default: 0
+#define RTE_JPEG_IRQ_PRIORITY               0
+
+// <o> JPEG Encoding Mode
+//    <0=> 4:2:0(4lum+2chrblocks/MCU)
+// <i> Defines encoding mode for JPEG.
+// <i> Default: 0
+#define RTE_JPEG_MODE                       0
+
+// <o> JPEG Encoding Mode
+//    <0=> JPEGENC_420_MODE
+// <i> Defines encoding mode for JPEG.
+// <i> Default: 0
+#define RTE_JPEG_CODING_MODE                0
+
+// <o> JPEG AXI Burst Length
+// <i> AXI burst length for JPEG.
+// <i> Default: 64
+#define RTE_JPEG_AXI_BURST_LENGTH           64
+
+// <o> JPEG AXI write outstanding number
+// <i> AXI write outstanding number for JPEG.
+// <i> Default: 64
+#define RTE_AXI_WRITE_OUTSTANDING_NUM       64
+
+// <o> JPEG AXI read outstanding number
+// <i> AXI read outstanding number for JPEG.
+// <i> Default: 64
+#define RTE_AXI_READ_OUTSTANDING_NUM        64
+
+#endif
+// </e> JPEG (JPEG) [Driver_JPEG]
 
 // <e> MIPI_CSI2 (mipi csi2) [Driver_MIPI_CSI2]
 // <i> Configuration settings for Driver_MIPI_CSI2 in component ::Drivers:MIPI_CSI2
@@ -1016,7 +944,6 @@
 //     <5=>   320x320_RGB565
 // <i> Default: 1
 #define RTE_MT9M114_CAMERA_SENSOR_MIPI_IMAGE_CONFIG            3
-#define RTE_MT9M114_CAMERA_SENSOR_MIPI_IMAGE_CONFIG            1
 
 // <i> MT9M114 MIPI frame width and height(derived from IMAGE_CONFIG)
 // <i> defines MT9M114 MIPI frame  width & height
@@ -1277,15 +1204,39 @@
 // <i> default: 2  (IPI-16 RAW 8)
 #define RTE_OV5675_CAMERA_SENSOR_CPI_COLOR_MODE          2
 
-// <o> select OV5675 frame height
-// <i> defines select OV5675 frame height.
-// <i> default: 972
-#define RTE_OV5675_CAMERA_SENSOR_FRAME_HEIGHT            972
+// <o> Select OV5675 image configuration
+//     <0=>   1296x972_RAW10
+//     <1=>   1920x1080_RAW10
+//     <2=>   1280x720_RAW10
+//     <3=>   640x480_RAW10
+// <i> Default: 0
+#define RTE_OV5675_CAMERA_SENSOR_IMAGE_CONFIG            0
 
-// <o> select OV5675 frame width
-// <i> defines select OV5675 frame width.
+// <i> OV5675 frame height (derived from IMAGE_CONFIG)
+// <i> defines OV5675 frame height.
+// <i> default: 972
+#if   (RTE_OV5675_CAMERA_SENSOR_IMAGE_CONFIG == 1)
+#define RTE_OV5675_CAMERA_SENSOR_FRAME_HEIGHT            1080
+#elif (RTE_OV5675_CAMERA_SENSOR_IMAGE_CONFIG == 2)
+#define RTE_OV5675_CAMERA_SENSOR_FRAME_HEIGHT            720
+#elif (RTE_OV5675_CAMERA_SENSOR_IMAGE_CONFIG == 3)
+#define RTE_OV5675_CAMERA_SENSOR_FRAME_HEIGHT            480
+#else
+#define RTE_OV5675_CAMERA_SENSOR_FRAME_HEIGHT            972
+#endif
+
+// <i> OV5675 frame width (derived from IMAGE_CONFIG)
+// <i> defines OV5675 frame width.
 // <i> default: 1296
+#if   (RTE_OV5675_CAMERA_SENSOR_IMAGE_CONFIG == 1)
+#define RTE_OV5675_CAMERA_SENSOR_FRAME_WIDTH             1920
+#elif (RTE_OV5675_CAMERA_SENSOR_IMAGE_CONFIG == 2)
+#define RTE_OV5675_CAMERA_SENSOR_FRAME_WIDTH             1280
+#elif (RTE_OV5675_CAMERA_SENSOR_IMAGE_CONFIG == 3)
+#define RTE_OV5675_CAMERA_SENSOR_FRAME_WIDTH             640
+#else
 #define RTE_OV5675_CAMERA_SENSOR_FRAME_WIDTH             1296
+#endif
 
 // <o RTE_OV5675_CAMERA_SENSOR_I2C_INSTANCE> Select camera sensor OV5675 i2c instance
 // <i> Defines camera sensor OV5675 i2c instance
@@ -11002,13 +10953,13 @@
 // <i> Default: BUS_WIDTH_4BIT
 #define RTE_SDC_BUS_WIDTH       1
 
-//    <o> SDC CLOCK SELECT
-//    <0=> SDC_12_5MHz
-//    <1=> SDC_25MHz
-//    <2=> SDC_50MHz
-// <i> Defines SDC0 Clock select
+//    <o> SDC CLOCK SELECT (Hz)
+//    <12500000=> 12.5MHz
+//    <25000000=> 25MHz
+//    <50000000=> 50MHz
+// <i> Defines SDC0 Clock frequency in Hz
 // <i> Default: 25MHz
-#define RTE_SDC_CLOCK_SELECT    1
+#define RTE_SDC_CLOCK_SELECT    25000000
 
 //    <o> SDC DMA SELECT
 //    <0=> SDMA

@@ -51,9 +51,8 @@
 // <h>RAM Configuration
 // =======================
 //   <q>Combine SRAM0 & SRAM1
-//   <i> Combines SRAM0 and SRAM1 into a single 8 MiB memory region.
-#define SRAM0_SRAM1_COMBINED  1
-
+//   <i> Combines SRAM0 and SRAM1 into single memory region
+#define SRAM0_SRAM1_COMBINED        1
 // <h> SRAM
 //   <o> Base address <0x02000000-0x027FFFFF:8>
 //   <i> Defines base address of SRAM memory region.
@@ -200,14 +199,6 @@
 //   <i> Defines size of RTSS HP application memory region.
 //   <i> Default: 0x00200000
 #define APP_OSPI_FLASH_HP_SIZE 0x00200000
-// </h>
-
-// <h>OSPI0 PSRAM XIP Configuration
-// ================================
-// AppKit-E8-AIML provides 64 MiB APS512XXN PSRAM on OSPI0. These definitions
-// are retained for configurations that explicitly place data in external RAM.
-#define APP_OSPI_PSRAM_BASE    0xA0000000
-#define APP_OSPI_PSRAM_SIZE    0x04000000
 // </h>
 
 #define APP_HE_ITCM_SIZE       APP_SRAM4_SIZE

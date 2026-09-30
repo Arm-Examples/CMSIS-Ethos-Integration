@@ -125,11 +125,6 @@ LR_ROM __ROM_BASE NOCOMPRESS __ROM_SIZE  {    ; load region size_region
   }
 
 #endif
-
-  ; RW_OSPI_PSRAM APP_OSPI_PSRAM_BASE APP_OSPI_PSRAM_SIZE  {
-  ; * (ethos_arena)                         ; Dedicated_Sram using OSPI
-  ; }
-
   PADDING +0 OVERLAY ALIGN 16 FILL 0 16
   {
   }

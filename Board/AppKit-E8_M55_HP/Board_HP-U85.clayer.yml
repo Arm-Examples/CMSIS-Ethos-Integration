@@ -60,6 +60,9 @@ layer:
     - component: BSP:External peripherals:CAMERA Sensor MT9M114
     - component: BSP:External peripherals:Ethernet PHY
     - component: BSP:External peripherals:ILI9806E LCD panel
+      define:
+      - BOARD_LCD_BL_LED_GPIO_PORT: BOARD_LCD_BL_LED_GPIO_PORT
+      - BOARD_LCD_BL_LED_GPIO_PIN: BOARD_LCD_BACKLIGHT_GPIO_PIN
 
     - component: CMSIS:CORE
 
