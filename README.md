@@ -1,3 +1,5 @@
+[![License](https://img.shields.io/github/license/Arm-Examples/CMSIS-Ethos-Integration?label=License)](./LICENSE)
+
 # CMSIS-Ethos-Integration
 
 This repository contains Ethos-U integration guidance for a reproducible and verified developer journey.
