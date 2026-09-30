@@ -1,0 +1,62 @@
+name: Build example
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: ${{ matrix.solution }} (${{ matrix.toolchain }})
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { solution: Test-Ethos-U55, toolchain: AC6 }
+          - { solution: Test-Ethos-U55, toolchain: GCC }
+          - { solution: Test-Ethos-U85, toolchain: AC6 }
+          - { solution: Test-Ethos-U85, toolchain: GCC }
+
+    steps:
+      - name: Checkout this repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Checkout Ethos-U pack repository
+        uses: actions/checkout@v7
+        with:
+          repository: VladimirUmek/Ethos-U
+          path: CMSIS-Ethos-U
+
+      - name: Install vcpkg
+        uses: ARM-software/cmsis-actions/setup-vcpkg@8a50b77681a484568e08f31fb7c2285c4735f682 # v1.3
+
+      - name: Install tools
+        uses: ARM-software/cmsis-actions/vcpkg@8a50b77681a484568e08f31fb7c2285c4735f682 # v1.3
+        with:
+          config: "./vcpkg-configuration.json"
+          cache:  "Tools"
+
+      - name: Activate Arm tool license
+        uses: ARM-software/cmsis-actions/armlm@8a50b77681a484568e08f31fb7c2285c4735f682 # v1.3
+
+      - name: Initialize CMSIS pack root folder
+        run: |
+          cpackget init https://www.keil.com/pack/index.pidx
+          cpackget update-index
+
+      - name: Register local pack
+        run: cpackget add ./CMSIS-Ethos-U/ARM.CMSIS-Ethos-U.pdsc
+
+      - name: Build ${{ matrix.solution }}
+        run: cbuild "${{ matrix.solution }}.csolution.yml" --packs --toolchain "${{ matrix.toolchain }}"
