@@ -80,5 +80,6 @@ solution:
       name:
         - hello_world/hello_world_int8.tflite
         - tiny_cnn/tiny_cnn_int8.tflite
+        - vww2/vww2_50_50_INT8.tflite
     simulator:
       target: SSE-300-U55

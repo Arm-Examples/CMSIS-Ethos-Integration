@@ -3,12 +3,12 @@
 
 # CMSIS Ethos-U integration example
 
-This repository demonstrates a CMSIS-Toolbox application using TensorFlow Lite
-Micro and the Arm Ethos-U NPU on the Alif AppKit-E8-AIML board. It provides
-Ethos-U55 and Ethos-U85 configurations for the board's M55 high-performance
-core. The test runs two Vela-compiled LiteRT models, `hello_world` and
-`tiny_cnn`, and compares their outputs with embedded reference values. A
-successful run prints `TEST RESULT: PASS` over the board's virtual COM port.
+This application tests Vela-compiled LiteRT models on the Alif AppKit-E8-AIML
+board, using its M55 high-performance core and Arm Ethos-U NPU. Separate
+solutions provide Ethos-U55 and Ethos-U85 configurations.
+
+The application runs selected models through Ethos-U and compares its output
+with embedded reference data. A successful run reports `TEST RESULT: PASS`.
 
 ## Quick start in VS Code
 
@@ -53,26 +53,85 @@ AppKit-E8 application with:
 cbuild Test-Ethos-U85.csolution.yml --active AppKit-E8-U85@J-Link --toolchain GCC --packs
 ```
 
-`--packs` downloads missing public packs. For a different target or compiler,
-select it with `--active` or `--toolchain` respectively. The
-[Build workflow](.github/workflows/Build.yml) checks the U55 and U85 solutions
-with both AC6 and GCC.
-
 ## Project layout
 
 | Path | Purpose |
-| ---- | ------- |
-| [`Test-Ethos-U55.csolution.yml`](Test-Ethos-U55.csolution.yml), [`Test-Ethos-U85.csolution.yml`](Test-Ethos-U85.csolution.yml) | Target, build, and MLOps settings for each NPU |
-| [`Test-Ethos-U.cproject.yml`](Test-Ethos-U.cproject.yml) | Shared test application and layer selection |
-| [`Board/AppKit-E8_M55_HP/`](Board/AppKit-E8_M55_HP/) | AppKit-E8 board layers, linker configuration, and board setup guide |
-| [`Model/`](Model/) | Quantized and Vela-compiled models, model sources, and the ML layer |
-| [`Source/test_main.cpp`](Source/test_main.cpp) | Runs both models and checks their outputs |
+| --- | --- |
+| [`Test-Ethos-U55.csolution.yml`](Test-Ethos-U55.csolution.yml), [`Test-Ethos-U85.csolution.yml`](Test-Ethos-U85.csolution.yml) | Defines targets, build and MLOps settings |
+| [`Test-Ethos-U.cproject.yml`](Test-Ethos-U.cproject.yml) | Project file that selects application, ML layer, and board layer |
+| [`Source/app_main.cpp`](Source/app_main.cpp) | Start the application and runs test |
+| [`Model/`](Model/) | Model layer containing multiple ML models |
+| [`Board/AppKit-E8_M55_HP/`](Board/AppKit-E8_M55_HP/) | Contains AppKit-E8 board layer |
 | [`script/`](script/) | Model converter and its [usage guide](script/README.md) |
 
-The checked-in Vela outputs are ready to build. After changing an NPU or memory
-configuration, generate the solution's `*.cbuild-mlops.yml` by opening or
-building that solution, then recompile the models as described below and in the
-[model converter guide](script/README.md).
+## ML Layer
+
+The project selects ML layer with multiple models:
+
+```yaml
+  layers:
+    - layer: $SolutionDir()$/Model/ML-MyModels.clayer.yml
+```
+
+`Model/ML-MyModels.clayer.yml` lists LiteRT framework, dependencies and ML models.
+Its `MODEL_*` defines enable the matching descriptors and test calls in `Source/app_main.cpp`.
+
+Each model group lists the `README.md` file, `VELA_SUMMARY.md` with recorded compilation settings
+and memory requirements, the source and compiled model and reference data for tests.
+
+
+## Integration Test
+
+The test runner is simple. It supports ML model with
+**one int8 input, one int8 output, and full Ethos-U offload**.
+
+- `TestModel_Int8()` runs the model, checks every output value against its
+  tolerance, optionally checks the winning class, and records a PASS/FAIL result.
+
+A model's `PASS` result confirms that inference executed successfully through
+Ethos-U and matched its reference within the configured tolerance on the target
+being tested.
+
+Tests run sequentially and reuse a 64 KiB, 16-byte-aligned tensor arena in
+`Source/model_test.cpp`. Board linker files place the model and arena in
+NPU-accessible memory.
+
+## Integrate a new model
+
+Use an existing model as a template:
+
+1. **Prepare the files.** Create `Model/<name>/` with the original quantized
+   `.tflite`, reference input/output C arrays and header, and a brief README.
+
+2. **Convert the model.** Add `<name>/<model>.tflite` to the target solution's
+   `mlops.model.name` list (relative to `mlops.model.dir: ./ML`). Open or build
+   the solution to regenerate its MLOps file, then run, for example:
+
+   ```sh
+   python script/model-converter.py Test-Ethos-U85.cbuild-mlops.yml
+   ```
+
+   The [converter](script/README.md) generates the compiled `.tflite`, model C
+   array, and `VELA_SUMMARY.md`. Confirm zero CPU operators and review memory use.
+
+3. **Register the files.** In `Model/ML-MyModels.clayer.yml`, add a model group
+   listing those generated files, reference sources/header, original `.tflite`,
+   and README. Add a unique define such as `MODEL_MY_MODEL`.
+
+4. **Describe the test.** In `Source/app_main.cpp`, under that define, include
+   the reference header, declare the generated model array, and initialize a
+   `ModelData_Int8` with its name, model, input, expected output, buffer sizes,
+   allowed error in quantized steps, and optional argmax check.
+
+5. **Call the test.** Add `TestModel_Int8(Model_My_Model)` under the same
+   `#if defined(MODEL_MY_MODEL)` guard, between the existing `TestInitialize()`
+   and `TestSummary()` calls. Tests must run sequentially to share the arena.
+
+6. **Build and validate.** Check that the model and arena fit NPU-accessible
+   memory; increase `TENSOR_ARENA_SIZE` in `Source/model_test.cpp` if needed,
+   allowing for TFLM metadata and scratch. Build for the matching AppKit-E8 NPU,
+   load and run, and confirm the new model's `PASS` and final
+   `TEST RESULT: PASS` on UART4.
 
 ## Project Configurations for AppKit-E8-AIML
 
@@ -93,7 +152,9 @@ Each column describes one combination of NPU and Vela memory mode.
 | `ethos_cache`          | Unused              | Unused              | Unused                | Unused                | SRAM0 via `AXI_SRAM`  |
 | `SRAM0_SRAM1_COMBINED` | `1`                 | `1`                 | `1`                   | `1`                   | `0`                   |
 
-Set `npu.type` to `Ethos-U55` or `Ethos-U85` as indicated by the column, and set `npu.macs` to `256`. Use the table's `system` and `memory` values for `vela` in the corresponding solution. After changing these settings, recompile both `hello_world` and `tiny_cnn`:
+Set `npu.type` to `Ethos-U55` or `Ethos-U85` as indicated by the column, and set `npu.macs` to `256`.
+Use the table's `system` and `memory` values for `vela` in the corresponding solution.
+After changing these settings, recompile both `hello_world` and `tiny_cnn`:
 
 | NPU | Conversion command                                                 |
 | --- | ------------------------------------------------------------------ |

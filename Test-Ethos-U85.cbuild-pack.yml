@@ -3,13 +3,16 @@ cbuild-pack:
     - resolved-pack: ARM::CMSIS@6.3.0
       selected-by-pack:
         - ARM::CMSIS
-        - ARM::CMSIS@^6.3.0
+        - ARM::CMSIS@^6.2.0
     - resolved-pack: ARM::CMSIS-Compiler@2.3.0
       selected-by-pack:
-        - ARM::CMSIS-Compiler@^2.3.0
+        - ARM::CMSIS-Compiler@^2.1.0
     - resolved-pack: ARM::CMSIS-Driver@2.10.0
       selected-by-pack:
         - ARM::CMSIS-Driver@^2.10.0
+    - resolved-pack: ARM::CMSIS-Ethos-U@1.0.0
+      selected-by-pack:
+        - ARM::CMSIS-Ethos-U@^1.0.0
     - resolved-pack: ARM::CMSIS-NN@7.0.0
       selected-by-pack:
         - ARM::CMSIS-NN@^7.0.0
@@ -21,7 +24,7 @@ cbuild-pack:
         - ARM::SSE_320_BSP@^2.0.0
     - resolved-pack: AlifSemiconductor::Ensemble@2.2.1
       selected-by-pack:
-        - AlifSemiconductor::Ensemble@2.2.1
+        - AlifSemiconductor::Ensemble@2.2.1-0
     - resolved-pack: tensorflow::flatbuffers@1.26.2
       selected-by-pack:
         - tensorflow::flatbuffers
