@@ -40,14 +40,14 @@
 //     <1=> enable
 // <i> Defines CPI AXI port
 // <i> Default: AXI port enable
-#define RTE_CPI_AXI_PORT                                      0
+#define RTE_CPI_AXI_PORT                                      1
 
 // <o> Select CPI ISP port
 //     <0=> disable
 //     <1=> enable
 // <i> Defines CPI ISP port
 // <i> Default: ISP port disable
-#define RTE_CPI_ISP_PORT                                      1
+#define RTE_CPI_ISP_PORT                                      0
 
 // <o> CPI Row roundup
 //     <0=> disable
@@ -103,13 +103,13 @@
 // <o> CPI number of active framebuffers
 // <i> Defines CPI number of active framebuffers
 // <i> Default: 2
-#define RTE_CPI_NUM_ACTIVE_FRAMEBUFFERS                       2
+#define RTE_CPI_NUM_ACTIVE_FRAMEBUFFERS                       0
 
 // <o> Enable CPI streaming
 // <0=> Disable
 // <1=> Enable
 // <i> Default: 1
-#define RTE_CPI_STREAMING_ENABLE                              1
+#define RTE_CPI_STREAMING_ENABLE                              0
 
 // <e> MT9M114 [Driver_MT9M114]
 // <o> Enable/Disable MT9M114 camera sensor
@@ -1210,7 +1210,7 @@
 //     <2=>   1280x720_RAW10
 //     <3=>   640x480_RAW10
 // <i> Default: 0
-#define RTE_OV5675_CAMERA_SENSOR_IMAGE_CONFIG            0
+#define RTE_OV5675_CAMERA_SENSOR_IMAGE_CONFIG            2
 
 // <i> OV5675 frame height (derived from IMAGE_CONFIG)
 // <i> defines OV5675 frame height.

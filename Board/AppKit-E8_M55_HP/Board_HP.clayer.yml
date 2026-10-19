@@ -29,20 +29,13 @@ layer:
   # List of #define statements passed via the command line to the build tool.
   define:
     - CMSIS_target_header: \"AppKit-E8-AIML.h\"
-    - ETHOSU_MACS: 256
-
-    # Shared_Sram (Vela: RTSS_HP_SRAM_MRAM / Shared_Sram):
-    - NPU_QCONFIG: 2
-    - NPU_REGIONCFG_0: 3
-    - NPU_REGIONCFG_1: 0
 
   # List the packs used in the layer.
   packs:
-    - pack: AlifSemiconductor::Ensemble@2.2.1
-    - pack: ARM::CMSIS@^6.3.0
-    - pack: ARM::CMSIS-Ethos-U@^1.0.0-0
-    - pack: ARM::CMSIS-Compiler@^2.3.0
-    - pack: ARM::CMSIS-Driver@^2.10.0
+    - pack: AlifSemiconductor::Ensemble@^2.2.1-0
+    - pack: ARM::CMSIS@^6.2.0
+    - pack: ARM::CMSIS-Ethos-U@^1.0.0
+    - pack: ARM::CMSIS-Compiler@^2.1.0
 
   # List miscellaneous options passed via the command line to the build tool.
   misc:
@@ -57,7 +50,7 @@ layer:
 
     - component: BSP:Board Config
     - component: BSP:AppKit Config&AppKit-E8-AIML
-    - component: BSP:External peripherals:CAMERA Sensor MT9M114
+    - component: BSP:External peripherals:CAMERA Sensor OV5675
     - component: BSP:External peripherals:Ethernet PHY
     - component: BSP:External peripherals:ILI9806E LCD panel
       define:
@@ -97,6 +90,8 @@ layer:
     - component: Device:SOC Peripherals:PINCONF
 
     - component: Machine Learning:NPU Support:Ethos-U Driver&Generic U55
+      define:
+        - ETHOSU_MACS: 256
 
     - component: Services:Retarget IO:STDERR
     - component: Services:Retarget IO:STDIN

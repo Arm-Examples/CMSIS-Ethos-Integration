@@ -50,9 +50,8 @@ Refer to ["Alif Conductor Tool Manual"](https://conductor.alifsemi.com/Alif_HTML
 
 | Driver                 | Stream Format Description
 |:-----------------------|:----------------------------------------------------
-| Driver_vStreamAudioIn  | 16-bit PCM audio,      16000 samples/second
-| Driver_vStreamVideoIn  | RAW8 Bayer GBRG video, resolution 1280 x 720 (W x H)
-| Driver_vStreamVideoOut | RGB888 video,          resolution  480 x 800 (W x H)
+| Driver_vStreamVideoIn  | RAW10 Bayer GRBG video, resolution 1280 x 720 (W x H)
+| Driver_vStreamVideoOut | RGB888 video,           resolution  480 x 800 (W x H)
 
 ## SETOOLS
 
@@ -68,5 +67,4 @@ In VS Code use the menu command **Terminal - Run Tasks** and execute:
 
 - "Alif: Install M55_HE or M55_HP debug stubs (single core configuration)"
 
-> Note: For Windows ensure that the Terminal default is `Git Bash` or `PowerShell`.
 > - Configure SW4 to position SE (Secure UART) to enable SETOOLS communication with the device.

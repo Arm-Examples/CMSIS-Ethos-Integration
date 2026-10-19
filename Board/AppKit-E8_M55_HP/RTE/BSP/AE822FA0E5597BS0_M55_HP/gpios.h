@@ -248,7 +248,7 @@ const struct gpioconf board_gpioconf[] = {
         PORT_14,
         0,
         (1 << PIN_2),
-        (1 << PIN_2) | (1 << PIN_1) | (1 << PIN_0),
+        (1 << PIN_4) | (1 << PIN_3) | (1 << PIN_2) | (1 << PIN_1) | (1 << PIN_0),
         0,
         0,
         0,

@@ -90,13 +90,6 @@ SECTIONS
     LONG ( LOADADDR(.code.at_itcm) )
     LONG ( ADDR(.code.at_itcm) )
     LONG ( SIZEOF(.code.at_itcm)/4 )
-    /* Sram_Only: uncomment these three entries when .ethos_model.at_sram1 is
-       enabled below. Shared_Sram keeps the model in MRAM and needs no copy. */
-    /*
-    LONG ( LOADADDR(.ethos_model.at_sram1) )
-    LONG ( ADDR(.ethos_model.at_sram1) )
-    LONG ( SIZEOF(.ethos_model.at_sram1)/4 )
-    */
     __copy_table_end__ = .;
     . = ALIGN(16);
   } > MRAM
@@ -152,8 +145,8 @@ SECTIONS
 
   .code.at_itcm : ALIGN(8)
   {
-    *(.itcm*)
-    *(.text.itcm*)
+    *(*.itcm.*)
+    *(.text*)
     . = ALIGN(16);
   } > ITCM AT > MRAM
 
@@ -162,7 +155,7 @@ SECTIONS
     *(vtable)
     *(.data)
     *(.data*)
-    *(.dtcm*)                             /* Objects targeting DTCM */
+    *(*.dtcm.*)
     *arm_common_tables*(.data* .rodata*)
 
     KEEP(*(.jcr*))
@@ -177,24 +170,6 @@ SECTIONS
   } > DTCM AT > MRAM
 
 #if __HAS_BULK_SRAM
-  /* Dedicated_Sram: uncomment this output section for the fast cache. */
-  /*
-  .ethos_cache.at_sram0 (NOLOAD) : ALIGN(32)
-  {
-    *(ethos_cache)
-  } > SRAM0
-  */
-
-  /* Sram_Only: uncomment this output section and the corresponding copy-table
-     entries above. Also comment .ethos_model.at_mram below. */
-  /*
-  .ethos_model.at_sram1 : ALIGN(16)
-  {
-    *(ethos_model)
-    . = ALIGN(16);
-  } > SRAM1 AT > MRAM
-  */
-
   /* Shared_Sram: model and command stream execute directly from MRAM. */
   .ethos_model.at_mram : ALIGN(16)
   {
@@ -202,7 +177,7 @@ SECTIONS
     . = ALIGN(16);
   } > MRAM
 
-  /* Sram_Only and Shared_Sram: writable arena in SRAM1. */
+  /* Shared_Sram: writable arena in SRAM1. */
   .ethos_arena.at_sram1 (NOLOAD) : ALIGN(16)
   {
     *(ethos_arena)
@@ -212,6 +187,8 @@ SECTIONS
   {
     *(.bss.lcd_crop_and_interpolate_buf)  /* LCD crop and intrepolate image processing buffer. */
     *(.bss.lcd_frame_buf)                 /* LCD frame Buffer. */
+    *(.bss.lcd_frame_buf1)                /* LCD frame Buffer 1 (double buffering). */
+    *(.bss.lcd_frame_buf2)                /* LCD frame Buffer 2 (double buffering). */
     *(.bss.camera_frame_buf)              /* Camer Frame Buffer */
     *(.bss.camera_frame_bayer_to_rgb_buf) /* (Optional) Camera Frame Buffer for Bayer to RGB Conversion. */
     *(.data.audio_samples)               /* Audio sample data */
@@ -275,6 +252,7 @@ SECTIONS
 
     . = ALIGN(4);
     /* preinit data */
+    PROVIDE_HIDDEN (__bothinit_array_start = .);
     PROVIDE_HIDDEN (__preinit_array_start = .);
     KEEP(*(.preinit_array))
     PROVIDE_HIDDEN (__preinit_array_end = .);
@@ -285,6 +263,7 @@ SECTIONS
     KEEP(*(SORT(.init_array.*)))
     KEEP(*(.init_array))
     PROVIDE_HIDDEN (__init_array_end = .);
+    PROVIDE_HIDDEN (__bothinit_array_end = .);
 
     . = ALIGN(4);
     /* finit data */

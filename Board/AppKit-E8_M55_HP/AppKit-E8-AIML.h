@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-#ifndef APPKIT_E8_H_
-#define APPKIT_E8_H_
+#ifndef APPKIT_E8_AIML_H_
+#define APPKIT_E8_AIML_H_
 
 #include "Driver_GPIO_Private.h"
 #include "Driver_ETH_MAC.h"
@@ -38,7 +38,6 @@
 extern ARM_DRIVER_ETH_MAC Driver_ETH_MAC0;        /* Ethernet         */
 extern ARM_DRIVER_USART   Driver_USART4;          /* PRG USB          */
 extern ARM_DRIVER_USBD    Driver_USBD0;           /* USB Device       */
-extern vStreamDriver_t    Driver_vStreamAudioIn;  /* Audio In Stream  */
 extern vStreamDriver_t    Driver_vStreamVideoIn;  /* Video In Stream  */
 extern vStreamDriver_t    Driver_vStreamVideoOut; /* Video Out Stream */
 
@@ -46,4 +45,4 @@ extern vStreamDriver_t    Driver_vStreamVideoOut; /* Video Out Stream */
 #include CMSIS_shield_header
 #endif
 
-#endif /* APPKIT_E8_H_ */
+#endif /* APPKIT_E8_AIML_H_ */

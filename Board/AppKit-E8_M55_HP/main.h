@@ -31,7 +31,7 @@ extern int shield_setup(void);
 extern int stdio_init(void);
 
 #if defined(ETHOSU_ARCH)
-extern void ethos_setup (void);
+extern void ethos_setup(void);
 #endif
 
 #ifdef __cplusplus

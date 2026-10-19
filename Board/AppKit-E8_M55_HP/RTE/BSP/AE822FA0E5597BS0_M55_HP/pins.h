@@ -843,6 +843,9 @@ const struct pinconf board_pinconf[] = {
     /* Selected: GPIO14_2 for "QEC_Z_GPO" */
     {PORT_14, PIN_2, PINMUX_ALTERNATE_FUNCTION_0, PADCTRL_OUTPUT_DRIVE_STRENGTH_4MA},
 
+    /* P14_3: I2C_C1_C2, low selects the OV5675 on J9/J16 (schematic rev C). */
+    {PORT_14, PIN_3, PINMUX_ALTERNATE_FUNCTION_0, PADCTRL_OUTPUT_DRIVE_STRENGTH_4MA},
+
     /* P14_4 on pin W12. Functions: [0]: >>>GPIO14_4<<<, [1]: CMP3_OUT_B, [2]: SPI1_MISO_C, [3]:
        FAULT0_C */
     /* Selected: GPIO14_4 */
